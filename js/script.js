@@ -9,6 +9,7 @@ const listItems = document.querySelectorAll('.student-item'); // Select all stud
 const itemsPerPage = 10;
 console.log(listItems);
 
+// Disploy a subset of the full list, based on the page value passed
 function showPage(list, page) {
   const startIndex = (page * itemsPerPage) - itemsPerPage;
   const endIndex = page * itemsPerPage;
@@ -25,14 +26,41 @@ function showPage(list, page) {
   }
 }
 
-showPage(listItems, 6);
+// showPage(listItems, 6);
 /***
    Create the `appendPageLinks function` to generate, append, and add
    functionality to the pagination buttons.
 ***/
 
+function appendPageLinks() {
+  const pageCount = Math.ceil(listItems.length / itemsPerPage);
 
+  const pageDiv = document.querySelector('.page');
+  const paginationDiv = document.createElement('div');
+  const paginationUL = document.createElement('ul');
 
+  paginationDiv.className = 'pagination';
+  paginationDiv.appendChild(paginationUL);
 
+  function createPaginationLI(pageNumber) {
+    let li = document.createElement('li');
+    let a = document.createElement('a');
+    a.href = '#';
+    a.textContent = pageNumber;
+    if (pageNumber === 1) {
+      a.className = 'active';  // Set our starting page
+    };
+    li.appendChild(a);
+    return li;
+  }
 
+  for (let i = 1; i <= pageCount; i++) {
+    let li = createPaginationLI(i);
+    paginationUL.appendChild(li);
+  };
+
+  pageDiv.appendChild(paginationDiv);
+};
+
+appendPageLinks();
 // Remember to delete the comments that came with this file, and replace them with your own code comments.
