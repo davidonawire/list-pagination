@@ -47,20 +47,39 @@ function appendPageLinks() {
     let a = document.createElement('a');
     a.href = '#';
     a.textContent = pageNumber;
-    if (pageNumber === 1) {
-      a.className = 'active';  // Set our starting page
-    };
     li.appendChild(a);
     return li;
   }
 
+  function setActiveClass(pageNumber) {
+    const previousActive = paginationUL.querySelector('.active');
+    const newActiveIndex = pageNumber - 1;
+    const newActive = paginationUL.getElementsByTagName('a')[newActiveIndex];
+    if (previousActive) {
+      previousActive.className = '';
+    }
+    newActive.className = 'active';
+  }
+
+  // Build the pagination LIs and set the first page to active
   for (let i = 1; i <= pageCount; i++) {
     let li = createPaginationLI(i);
     paginationUL.appendChild(li);
   };
+  setActiveClass(1);
 
   pageDiv.appendChild(paginationDiv);
+
+  paginationUL.addEventListener('click', (e) => {
+    if (e.target.nodeName = 'a') {
+      const clickedPageNumber = e.target.textContent;
+      setActiveClass(clickedPageNumber);
+      showPage(listItems, clickedPageNumber);
+    }
+  });
+  
 };
 
 appendPageLinks();
+showPage(listItems, 1);
 // Remember to delete the comments that came with this file, and replace them with your own code comments.
