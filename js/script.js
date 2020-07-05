@@ -30,6 +30,12 @@ function doSearch(searchInput, list) {
   const noMatchesDiv = document.getElementById('noMatches');
   noMatchesDiv.style.display = 'none';
 
+  // Clear earlier pagination, if any
+  const pagination = document.querySelector('div.pagination');
+  if (pagination) {
+    pagination.parentNode.removeChild(pagination);
+  }
+
   list.forEach((entry) => {
     // first, reset things from previous searches
     entry.classList.remove('match');
@@ -100,12 +106,6 @@ function appendSearch() {
 function appendPageLinks(list) {
   const pageCount = Math.ceil(list.length / itemsPerPage);
   const pageDiv = document.querySelector('.page');
-
-  // Clear earlier pagination, if any
-  const pagination = document.querySelector('div.pagination');
-  if (pagination) {
-    pagination.parentNode.removeChild(pagination);
-  }
 
   // If there's only one page, do not display pagination
   if (pageCount === 1) {
