@@ -26,9 +26,9 @@ function showPage(list, page) {
 }
 
 function doSearch(searchInput, list) {
-  // clear previous pagination to make room for updated search pagination
-  const pagination = document.querySelector('div.pagination');
-  pagination.parentNode.removeChild(pagination);
+  // clear earlier No Matches state
+  const noMatchesDiv = document.getElementById('noMatches');
+  noMatchesDiv.style.display = 'none';
 
   list.forEach((entry) => {
     // first, reset things from previous searches
@@ -47,18 +47,23 @@ function doSearch(searchInput, list) {
     showPage(listItems, 1);
     appendPageLinks(listItems);
     return;
-  }
+  };
 
   const matchItems = document.querySelectorAll('.match');
 
   // if we have no matches, display the "No Matches" state
+  if (matchItems.length === 0) {
+    noMatchesDiv.style.display = '';
+    return;
+  };
 
   const page = 1;
   showPage(matchItems, page);
   appendPageLinks(matchItems);
-}
+};
 
 function appendSearch() {
+  const pageDiv = document.querySelector('.page');
   const header = document.querySelector('.page-header');
 
   const searchDiv = document.createElement('div');
@@ -70,9 +75,17 @@ function appendSearch() {
   const searchSubmit = document.createElement('button');
   searchSubmit.textContent = "Search";
 
+  // Prepare a "no matches" message and hide it for now
+  const noMatches = document.createElement('div');
+  noMatches.id = 'noMatches';
+  noMatches.textContent = "No matches found."
+  noMatches.style.textAlign = 'center';
+  noMatches.style.display = 'none';
+
   searchDiv.appendChild(searchInput);
   searchDiv.appendChild(searchSubmit);
   header.appendChild(searchDiv);
+  pageDiv.appendChild(noMatches);
 
   searchSubmit.addEventListener('click', (event) => {
     event.preventDefault();
@@ -87,6 +100,17 @@ function appendSearch() {
 function appendPageLinks(list) {
   const pageCount = Math.ceil(list.length / itemsPerPage);
   const pageDiv = document.querySelector('.page');
+
+  // Clear earlier pagination, if any
+  const pagination = document.querySelector('div.pagination');
+  if (pagination) {
+    pagination.parentNode.removeChild(pagination);
+  }
+
+  // If there's only one page, do not display pagination
+  if (pageCount === 1) {
+    return;
+  }
 
   function createPaginationLI(pageNumber) {
     let li = document.createElement('li');
