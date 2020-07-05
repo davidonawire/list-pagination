@@ -25,8 +25,68 @@ function showPage(list, page) {
   }
 }
 
-function appendPageLinks() {
-  const pageCount = Math.ceil(listItems.length / itemsPerPage);
+function showMatches(searchInput, list) {
+  // clear previous pagination to make room for updated search pagination
+  const pagination = document.querySelector('div.pagination');
+  pagination.parentNode.removeChild(pagination);
+
+  list.forEach((entry) => {
+    // first, reset things from previous searches
+    entry.classList.remove('match');
+    entry.style.display = 'none';
+
+    // find our new matches
+    if ((searchInput.value.length !== 0) && (entry.textContent.toLowerCase().includes(searchInput.value.toLowerCase()))) {
+      entry.classList.add('match');
+      entry.style.display = '';
+    };
+  });
+
+  // if search input is empty, take us back to non-search-filtered state
+  if (searchInput.value.length === 0) {
+    // Reset to non-search-filtered state
+    showPage(listItems, 1);
+    appendPageLinks(listItems);
+    return;
+  }
+
+  const matchItems = document.querySelectorAll('.match');
+
+  // if we have no matches, display the "No Matches" state
+
+  const page = 1;
+  showPage(matchItems, page);
+  appendPageLinks(matchItems);
+}
+
+function appendSearch() {
+  const header = document.querySelector('.page-header');
+
+  const searchDiv = document.createElement('div');
+  searchDiv.className = "student-search";
+
+  const searchInput = document.createElement('input');
+  searchInput.placeholder = "Search for students...";
+
+  const searchSubmit = document.createElement('button');
+  searchSubmit.textContent = "Search";
+
+  searchDiv.appendChild(searchInput);
+  searchDiv.appendChild(searchSubmit);
+  header.appendChild(searchDiv);
+
+  searchSubmit.addEventListener('click', (event) => {
+    event.preventDefault();
+    showMatches(searchInput, listItems);
+  });
+
+  searchInput.addEventListener('keyup', (event) => {
+    showMatches(searchInput, listItems);
+  });
+}
+
+function appendPageLinks(list) {
+  const pageCount = Math.ceil(list.length / itemsPerPage);
   const pageDiv = document.querySelector('.page');
 
   function createPaginationLI(pageNumber) {
@@ -66,11 +126,17 @@ function appendPageLinks() {
     if (e.target.nodeName = 'a') {
       const clickedPageNumber = e.target.textContent;
       setActiveClass(clickedPageNumber);
-      showPage(listItems, clickedPageNumber);
+      showPage(list, clickedPageNumber);
     }
   });
 
 };
 
+// Create and add a search bar
+// Define a function to return all LIs which match the search
+// On search button click or field keyup, display matching LIs paginated
+
+// Starting state of page when loaded
 showPage(listItems, 1);
-appendPageLinks();
+appendSearch();
+appendPageLinks(listItems);
