@@ -8,7 +8,7 @@ FSJS project 2 - List Filter and Pagination
 const listItems = document.querySelectorAll('.student-item'); // Select all student li elements
 const itemsPerPage = 10;
 
-// Disploy a subset of the full list, based on the page value passed
+// Disploy a subset of a list, based on the page value passed
 function showPage(list, page) {
   const startIndex = (page * itemsPerPage) - itemsPerPage;
   const endIndex = page * itemsPerPage;
@@ -25,7 +25,7 @@ function showPage(list, page) {
   }
 }
 
-function showMatches(searchInput, list) {
+function doSearch(searchInput, list) {
   // clear previous pagination to make room for updated search pagination
   const pagination = document.querySelector('div.pagination');
   pagination.parentNode.removeChild(pagination);
@@ -34,9 +34,9 @@ function showMatches(searchInput, list) {
     // first, reset things from previous searches
     entry.classList.remove('match');
     entry.style.display = 'none';
-
     // find our new matches
-    if ((searchInput.value.length !== 0) && (entry.textContent.toLowerCase().includes(searchInput.value.toLowerCase()))) {
+    if ( (searchInput.value.length !== 0)
+    && (entry.textContent.toLowerCase().includes(searchInput.value.toLowerCase())) ) {
       entry.classList.add('match');
       entry.style.display = '';
     };
@@ -44,7 +44,6 @@ function showMatches(searchInput, list) {
 
   // if search input is empty, take us back to non-search-filtered state
   if (searchInput.value.length === 0) {
-    // Reset to non-search-filtered state
     showPage(listItems, 1);
     appendPageLinks(listItems);
     return;
@@ -77,11 +76,11 @@ function appendSearch() {
 
   searchSubmit.addEventListener('click', (event) => {
     event.preventDefault();
-    showMatches(searchInput, listItems);
+    doSearch(searchInput, listItems);
   });
 
   searchInput.addEventListener('keyup', (event) => {
-    showMatches(searchInput, listItems);
+    doSearch(searchInput, listItems);
   });
 }
 
@@ -132,11 +131,7 @@ function appendPageLinks(list) {
 
 };
 
-// Create and add a search bar
-// Define a function to return all LIs which match the search
-// On search button click or field keyup, display matching LIs paginated
-
-// Starting state of page when loaded
+// Load page with starting state
 showPage(listItems, 1);
 appendSearch();
 appendPageLinks(listItems);
