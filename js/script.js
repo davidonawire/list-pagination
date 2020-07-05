@@ -1,14 +1,15 @@
 /******************************************
-Treehouse Techdegree:
-FSJS project 2 - List Filter and Pagination
+- List Filter and Pagination -
+Uses unobtrusive JavaScript to add pagination and search
+to an HTML unordered list of student records. The number of records
+to show per page can be adjusted via the itemsPerPage variable.
 ******************************************/
 
-// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
 
 const listItems = document.querySelectorAll('.student-item'); // Select all student li elements
 const itemsPerPage = 10;
 
-// Disploy a subset of a list, based on the page value passed
+// Disploy one page of a given list
 function showPage(list, page) {
   const startIndex = (page * itemsPerPage) - itemsPerPage;
   const endIndex = page * itemsPerPage;
@@ -26,7 +27,7 @@ function showPage(list, page) {
 }
 
 function doSearch(searchInput, list) {
-  // clear earlier No Matches state
+  // clear any earlier No Matches state
   const noMatchesDiv = document.getElementById('noMatches');
   noMatchesDiv.style.display = 'none';
 
@@ -36,11 +37,11 @@ function doSearch(searchInput, list) {
     pagination.parentNode.removeChild(pagination);
   }
 
+  // find our new matches
   list.forEach((entry) => {
     // first, reset things from previous searches
     entry.classList.remove('match');
     entry.style.display = 'none';
-    // find our new matches
     if ( (searchInput.value.length !== 0)
     && (entry.textContent.toLowerCase().includes(searchInput.value.toLowerCase())) ) {
       entry.classList.add('match');
@@ -63,8 +64,8 @@ function doSearch(searchInput, list) {
     return;
   };
 
-  const page = 1;
-  showPage(matchItems, page);
+  // Otherwise, paginate and display our matching results
+  showPage(matchItems, 1);
   appendPageLinks(matchItems);
 };
 
@@ -103,6 +104,7 @@ function appendSearch() {
   });
 }
 
+// Create pagination control for a given element list (full or search-filtered)
 function appendPageLinks(list) {
   const pageCount = Math.ceil(list.length / itemsPerPage);
   const pageDiv = document.querySelector('.page');
@@ -121,6 +123,7 @@ function appendPageLinks(list) {
     return li;
   }
 
+  // Indicate which page we're actively viewing
   function setActiveClass(pageNumber) {
     const previousActive = paginationUL.querySelector('.active');
     const newActiveIndex = pageNumber - 1;
