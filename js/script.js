@@ -22,9 +22,9 @@ function showPage(list, page) {
       item.style.display = '';
     } else {
       item.style.display = 'none';
-    }
-  }
-}
+    };
+  };
+};
 
 function doSearch(searchInput, list) {
   // clear any earlier No Matches state
@@ -35,7 +35,7 @@ function doSearch(searchInput, list) {
   const pagination = document.querySelector('div.pagination');
   if (pagination) {
     pagination.parentNode.removeChild(pagination);
-  }
+  };
 
   // find our new matches
   list.forEach((entry) => {
@@ -69,6 +69,7 @@ function doSearch(searchInput, list) {
   appendPageLinks(matchItems);
 };
 
+// Create search input and button
 function appendSearch() {
   const pageDiv = document.querySelector('.page');
   const header = document.querySelector('.page-header');
@@ -85,7 +86,7 @@ function appendSearch() {
   // Prepare a "no matches" message and hide it for now
   const noMatches = document.createElement('div');
   noMatches.id = 'noMatches';
-  noMatches.textContent = "No matches found."
+  noMatches.textContent = "No matches found.";
   noMatches.style.textAlign = 'center';
   noMatches.style.display = 'none';
 
@@ -112,7 +113,7 @@ function appendPageLinks(list) {
   // If there's only one page, do not display pagination
   if (pageCount === 1) {
     return;
-  }
+  };
 
   function createPaginationLI(pageNumber) {
     let li = document.createElement('li');
@@ -121,7 +122,7 @@ function appendPageLinks(list) {
     a.textContent = pageNumber;
     li.appendChild(a);
     return li;
-  }
+  };
 
   // Indicate which page we're actively viewing
   function setActiveClass(pageNumber) {
@@ -130,9 +131,9 @@ function appendPageLinks(list) {
     const newActive = paginationUL.getElementsByTagName('a')[newActiveIndex];
     if (previousActive) {
       previousActive.className = '';
-    }
+    };
     newActive.className = 'active';
-  }
+  };
 
   // Start building our pagination HTML structure
   const paginationDiv = document.createElement('div');
@@ -153,7 +154,7 @@ function appendPageLinks(list) {
       const clickedPageNumber = e.target.textContent;
       setActiveClass(clickedPageNumber);
       showPage(list, clickedPageNumber);
-    }
+    };
   });
 
 };
